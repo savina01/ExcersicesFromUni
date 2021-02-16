@@ -1,92 +1,57 @@
 using System;
 using System.IO;
-using System.Text;
 
-
-namespace upr
+namespace exam
 {
-    class StartUp
+    class Program
     {
         static void Main()
         {
-
             /*: Задача 1. Да се състави програма, която: (30 т.)
             1. Прочита от файл, чието име се въвежда от клавиатурата, едномерен масив от цели числа,
             разделени с по един интервал (space), и проверява:                                           
 	        2. Дали масивът е сортиран в низходящ ред. (дали всеки два съседни елемента са равни или следващият е по-малък от предишния) 					
 	        3. Има ли в масива тройки елементи с равни стойности и колко са те.  
-
             */
 
-            Console.Write("Enter file path: ");
+            Console.Write("Въведете пътя на файла:");
             string path = Console.ReadLine();
-            string[] arr;
-            int[] numbers;
-
-
-            using(var f = File.OpenText(path))
+            int[] arr;
+            var f = File.OpenText(path);           
+            bool descdending = false;
+            do
             {
-                while(!f.EndOfStream)
+                string[] line = f.ReadLine().Split(" ");
+                arr = new int[line.Length];
+                for (int i = 0; i < arr.Length; i++)
                 {
-                    arr = f.ReadLine().Split(' ');
-                    numbers = new int[arr.Length];
-                    for (int i = 0; i < arr.Length; i++)
-                    {
-                        
-                        numbers[i] = int.Parse(arr[i]);
-                        Console.Write(numbers[i]+ " ");                                               
-                    }
-                    
-                    CheckDescending(numbers);
-                    TrepleSameElements(numbers);
-
+                    arr[i] = int.Parse(line[i]);
                 }              
-            }           
-        }
-        public static bool CheckDescending(int[] a)
-        {
-            bool descending = false;
-            for (int i = 0; i < a.Length; i++)
+            }
+            while(!f.EndOfStream);
+
+            for (int i = 1; i < arr.Length; i++)
             {
-                if (a[i] >= a[i+1])
-                {
-                    descending = true;
-                }
+                if (arr[i] >= arr[i -1] )
+                    descdending = true;
                 else
-                {
-                    break;                 
-                } 
+                    descdending = false;
             }
-            Console.WriteLine();
-            if (descending == false)
-                Console.WriteLine("Array is not sorted in descending order.");
-            else
-                Console.WriteLine("Array is sorted in descending order.");
+            Console.WriteLine($"Масивът е сортиран низходящо: {descdending} ");
 
-            return descending;
-        }
-        public static bool TrepleSameElements(int[] a)
-        {
-            // Има ли в масива тройки елементи с равни стойности и колко са те.  
+            bool triple = false;
 
-            bool treple = false;
-            for (int i = 0; i < a.Length; i++)
+            for (int i = 2; i < arr.Length; i++)
             {
-
-                if ((a[i] == a[i + 1]) && (a[i + 1] == a[i + 2]))                  
-                {                       
-                            treple = true;
-                            Console.WriteLine($"The same elements are on index: {i}, {i + 1} and {i + 2}.");
-                            Console.WriteLine($"The values are {a[i]} , {a[i + 1]} and {a[i + 2]}.");                       
-                }                                                 
+                if ((arr[i] == arr[i - 1]) && (arr[i - 1] == arr[i - 2]))
+                {
+                    triple = true;
+                    Console.WriteLine($"Тройка равни елементи се състоят от числото: {arr[i]}. ");
+                }
             }
-            Console.WriteLine();
-            if (treple == false)
-                Console.WriteLine("In this array there is no treple same elements.");
-            else
-                Console.WriteLine("In this array there is treple same elements. ");
-
-            return treple;
-        }
-    }         
+            if(triple==false)
+                Console.WriteLine($"Няма тройка равни елементи");
+            f.Close();
+	}
+    }
 }
