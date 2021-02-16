@@ -54,38 +54,24 @@ namespace ExamSolution
                 Console.Write(reversed[i] + " ");
             }
         }
-        static int MostCommonCount(int[] numbers)
+        static int MostCommonCount(int[] arr)
         {
-            Console.WriteLine();
-            int[] arr = numbers;
-            int count = 1;
-            int maxcount = 1;
-            int maxvalue = 0;
-            int result = 0;
+            int counter = 1; // Главен брояч
             for (int i = 0; i < arr.Length; i++)
             {
-                maxvalue = arr[i];
+                int tempCounter = 1; // Временен брояч, който е за всеки случай - най-накрая ако е по-голям от главния, на главния се присвоява числото от временния
                 for (int j = 0; j < arr.Length; j++)
                 {
-                    if (maxvalue == arr[j] && j != i)
+                    if (i != j)
                     {
-                        count++;
-                        if (count > maxcount)
-                        {
-                            maxcount = count;
-                            result = arr[i];
-                        }
-                    }
-                    else
-                    {
-                        count = 1;
+                        if (arr[i] == arr[j]) // Проверява всеки елемент от масива дали има друг, който да е равен
+                            tempCounter++;
                     }
                 }
+                if (tempCounter > counter)
+                    counter = tempCounter;
             }
-            Console.WriteLine($"{result} се среща {maxcount} пъти. ");
-
-
-            return result;
+            return counter;
         }
     }
 }
