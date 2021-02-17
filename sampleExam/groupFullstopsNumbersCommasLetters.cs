@@ -1,60 +1,57 @@
 using System;
 using System.IO;
-using System.Text;
 
-
-namespace ConsoleApp4
+namespace exam
 {
-    class StartUp
+    class Program
     {
         static void Main()
         {
-
-            /*Да се състави програма, която чете последователно от текстов файл знак по знак и прави статистика:  (20 т.)
-            2.1. Колко са буквите и колко са цифрите   (5 т.)
-            2.2. Колко са запетайките и колко са точките. (5 т.)
-            2.3. Преди да започне четенето, програмата пита потребителя за името на файла (пътя във файловата система, където се намира). (10 т.)
-
+            /*: Да се състави програма, която чете последователно от текстов файл знак по знак и прави статистика:  (   
+            2.1. Колко са буквите и колко са цифрите    
+            2.2. Колко са запетайките и колко са точките.   
+            2.3. Преди да започне четенето, програмата пита потребителя за името на файла (пътя във файловата система, където се намира).   
             */
-            Console.Write("Моля въведете пътя до файла: ");
+            Console.Write("Въведете пътя до файла: ");
             string path = Console.ReadLine();
-           
-            int letters = 0;
-            int numbers = 0;
-            int commas = 0;
-            int fullstops = 0;
-
-            using(var f=File.OpenText(path))
+            if(!File.Exists(path))
             {
-                while (!f.EndOfStream)
-                {
-                    bool inNumber = false;
-                    char ch = (char)f.Read();
-                    if (ch == '.')
-                        ++fullstops;
-                    if (ch == ',')
-                        ++commas;
-                    if(ch>='1'&& ch<='9')
-                    {
-                        if(!inNumber)
-                        {
-                            inNumber = true;
-                            ++numbers;
-                        }
-                    }
-                    else
-                        inNumber = false;
-
-                    if (ch >= 'a' && ch <= 'z')
-                        ++letters;
-                    
-                }
-                Console.WriteLine("Запетайки:{0}, Точки:{1}, Числа:{2}, Букви:{3}",commas,fullstops,numbers,letters);
+                Console.WriteLine("Файлът не съществува.");
             }
+            else
+            {
+                using (var f = File.OpenText(path))
+                {
+                    string text="";
+                    int lettersCount = 0;
+                    int digitsCount = 0;
+                    int commas = 0;
+                    int fullstops = 0;
 
+                    while(!f.EndOfStream)
+                    {
+                        string line = f.ReadLine();
+                        text += line;
+                    }
+                    foreach (var c in text)
+                    {
+                        if((c>='a' && c<='z') || (c>='A' && c<= 'Z'))
+                            ++lettersCount;
+                        if (c >= '1' && c <= '9')
+                            ++digitsCount;
+                        if (c == ',')
+                            ++commas;
+                        if (c == '.')
+                            ++fullstops;
+
+                    }
+                    Console.Write("Статистика: ");
+                    Console.WriteLine($"Букви: {lettersCount} , цифри: {digitsCount} , запетайки: {commas} , точки: {fullstops}");
+                }
+            }
             Console.ReadLine();
 
         }
-       
+
     }
 }
